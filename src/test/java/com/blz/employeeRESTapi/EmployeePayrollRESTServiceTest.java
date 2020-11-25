@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -70,4 +72,26 @@ public class EmployeePayrollRESTServiceTest {
 		assertEquals(3, entries);
 	}
 
+	@Test
+	public void givenMultipleEmployee_WhenAdded_ShouldMatch201ResponseAndCount() {
+		EmployeePayrollData[] arrayOfEmployee = getEmployeeList();
+		employeePayrollRESTService = new EmployeePayrollRESTService(Arrays.asList(arrayOfEmployee));
+
+		EmployeePayrollData[] arrayOfEmployeePayroll = {
+				new EmployeePayrollData(0, "Charlie", "M", 4000000.00, LocalDate.now()),
+				new EmployeePayrollData(0, "Gunjan", "F", 5000000.00, LocalDate.now()) };
+
+		for (EmployeePayrollData employeePayrollData : arrayOfEmployeePayroll) {
+
+			Response response = addEmployeeToJsonServer(employeePayrollData);
+			int statusCode = response.getStatusCode();
+			assertEquals(201, statusCode);
+
+			employeePayrollData = new Gson().fromJson(response.asString(), EmployeePayrollData.class);
+			employeePayrollRESTService.addEmployeeToPayroll(employeePayrollData, REST_IO);
+		}
+
+		long entries = employeePayrollRESTService.countEntries(REST_IO);
+		assertEquals(5, entries);
+	}
 }
