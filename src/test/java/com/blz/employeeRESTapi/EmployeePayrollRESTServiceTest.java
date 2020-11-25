@@ -4,8 +4,6 @@ import static org.junit.Assert.*;
 
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -40,7 +38,7 @@ public class EmployeePayrollRESTServiceTest {
 		RestAssured.port = 3000;
 	}
 
-	private EmployeePayrollData[] getEmployeeList() {
+	private static EmployeePayrollData[] getEmployeeList() {
 		Response response = RestAssured.get("/employee_payroll");
 		System.out.println("Employee Payroll entries in JsonServer :\n" + response.asString());
 		EmployeePayrollData[] arrayOfEmployee = new Gson().fromJson(response.asString(), EmployeePayrollData[].class);
@@ -91,5 +89,21 @@ public class EmployeePayrollRESTServiceTest {
 		}
 		long entries = employeePayrollRESTService.countEntries(REST_IO);
 		assertEquals(5, entries);
+	}
+
+	@Test
+	public void givenSalary_WhenUpdated_ShouldMatch200response() {
+		EmployeePayrollData[] arrayOfEmployee = getEmployeeList();
+		employeePayrollRESTService = new EmployeePayrollRESTService(Arrays.asList(arrayOfEmployee));
+		employeePayrollRESTService.updateEmployeesalary("Charlie", 6000000.00, REST_IO);
+		EmployeePayrollData employeePayrollData = employeePayrollRESTService.getEmployeePayrollData("Charlie");
+
+		String empJson = new Gson().toJson(employeePayrollData);
+		RequestSpecification request = RestAssured.given();
+		request.header("Content-Type", "application/json");
+		request.body(empJson);
+		Response response = request.put("/employee_payroll/" + employeePayrollData.id);
+		int statusCode = response.getStatusCode();
+		assertEquals(200, statusCode);
 	}
 }
