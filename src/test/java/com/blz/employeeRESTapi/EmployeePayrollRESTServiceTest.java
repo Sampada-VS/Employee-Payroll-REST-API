@@ -76,7 +76,6 @@ public class EmployeePayrollRESTServiceTest {
 	public void givenMultipleEmployee_WhenAdded_ShouldMatch201ResponseAndCount() {
 		EmployeePayrollData[] arrayOfEmployee = getEmployeeList();
 		employeePayrollRESTService = new EmployeePayrollRESTService(Arrays.asList(arrayOfEmployee));
-
 		EmployeePayrollData[] arrayOfEmployeePayroll = {
 				new EmployeePayrollData(0, "Charlie", "M", 4000000.00, LocalDate.now()),
 				new EmployeePayrollData(0, "Gunjan", "F", 5000000.00, LocalDate.now()) };
@@ -90,7 +89,6 @@ public class EmployeePayrollRESTServiceTest {
 			employeePayrollData = new Gson().fromJson(response.asString(), EmployeePayrollData.class);
 			employeePayrollRESTService.addEmployeeToPayroll(employeePayrollData, REST_IO);
 		}
-
 		long entries = employeePayrollRESTService.countEntries(REST_IO);
 		assertEquals(5, entries);
 	}
