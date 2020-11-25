@@ -1,0 +1,26 @@
+{
+	"employee_payroll": [
+		{
+			"id": 1,
+			"name": "Bill",
+			"gender": "M",
+			"salary": 1000000,
+			"startDate":{
+				"year":2020,
+				"month":11,
+				"day":1
+			}
+		},
+		{
+			"id": 2,
+			"name": "Terrisa",
+			"gender": "F",
+			"salary": 2000000,
+			"startDate":{
+				"year":2018,
+				"month":10,
+				"day":1
+			}
+		}
+  ]
+}
